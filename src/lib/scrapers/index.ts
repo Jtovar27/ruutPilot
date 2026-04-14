@@ -34,13 +34,21 @@ export async function runScrapers(
     if (r.status === "fulfilled") allLeads.push(...r.value);
   }
 
-  // Deduplicate by name + phone similarity
+  // Deduplicate by multiple keys: name+phone, name+address, phone alone
   const seen = new Set<string>();
   return allLeads
     .filter(lead => {
-      const key = `${lead.name.toLowerCase().trim()}|${lead.phone.replace(/\D/g, "")}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
+      const name = lead.name.toLowerCase().trim();
+      const phone = lead.phone.replace(/\D/g, "");
+      const addr = (lead.address || "").toLowerCase().trim().slice(0, 20);
+
+      const keys: string[] = [];
+      keys.push(`np:${name}|${phone}`);
+      if (addr) keys.push(`na:${name}|${addr}`);
+      if (phone) keys.push(`p:${phone}`);
+
+      if (keys.some(k => seen.has(k))) return false;
+      keys.forEach(k => seen.add(k));
       return true;
     })
     .map((lead, i) => ({ ...lead, id: i + 1 }));

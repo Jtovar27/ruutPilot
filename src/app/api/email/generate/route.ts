@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { groqChat } from "@/lib/groq";
 import { getAuthUser } from "@/lib/supabase/auth";
 import { getUserPlan, PLAN_LIMITS } from "@/lib/plans";
 import { createAdminClient } from "@/lib/supabase/admin";
-
-const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
   const { userId, email, unauthorized } = await getAuthUser();
@@ -78,13 +76,7 @@ Responde ÚNICAMENTE con JSON válido:
   "body": "cuerpo completo del email listo para enviar"
 }`;
 
-  const message = await client.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 800,
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const text = message.content[0].type === "text" ? message.content[0].text : "";
+  const text = await groqChat(prompt, { maxTokens: 800, json: true });
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
     return NextResponse.json({ error: "AI parse error" }, { status: 500 });

@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { groqChat } from "@/lib/groq";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAuthUser } from "@/lib/supabase/auth";
-
-const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
   const { userId, unauthorized } = await getAuthUser();
@@ -41,12 +39,6 @@ Pregunta del usuario: "${question}"
 
 Responde de forma concreta, accionable y en español. Máximo 5 puntos bullet. Si hay nombres de leads en el pipeline, mencionarlos específicamente cuando sea relevante.`;
 
-  const message = await client.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 600,
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const answer = message.content[0].type === "text" ? message.content[0].text : "";
+  const answer = await groqChat(prompt, { maxTokens: 600 });
   return NextResponse.json({ answer });
 }

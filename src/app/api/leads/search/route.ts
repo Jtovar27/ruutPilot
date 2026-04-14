@@ -3,6 +3,7 @@ import { getAuthUser } from "@/lib/supabase/auth";
 import { getUserPlan, getMonthlySearchCount, logSearch, PLAN_LIMITS } from "@/lib/plans";
 import { runScrapers, getPitchHint } from "@/lib/scrapers";
 import type { SourceId } from "@/lib/scrapers";
+import { groqChat } from "@/lib/groq";
 
 async function launchBrowser() {
   if (process.env.VERCEL) {
@@ -71,7 +72,10 @@ export async function GET(req: NextRequest) {
     browser = await launchBrowser();
     const context = await browser.newContext({
       userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-      locale: /\b(usa|united states|estados unidos|new york|miami|los angeles|chicago|houston|phoenix|dallas|san diego|denver|seattle|boston|atlanta|toronto|canada|montreal|vancouver)\b/i.test(location) ? "en-US" : "es-419",
+      locale: /^\d{5}(-\d{4})?$/.test(location.trim()) ? "en-US"
+        : /^[A-Z]{1,2}\d/i.test(location.trim()) ? "en-GB"
+        : /\b(usa|united states|estados unidos|new york|miami|los angeles|chicago|houston|phoenix|dallas|san diego|denver|seattle|boston|atlanta|toronto|canada|montreal|vancouver)\b/i.test(location) ? "en-US"
+        : "es-419",
       permissions: [],
     });
 
@@ -85,11 +89,37 @@ export async function GET(req: NextRequest) {
 
     if (leads.length > 0) await logSearch(userId!, query, location);
 
-    const enriched = leads.map((l) => ({
+    let enriched = leads.map((l) => ({
       ...l,
       hasWebsite: !!l.website,
       pitch: getPitchHint(l.category),
     }));
+
+    // AI relevance filter: remove clearly irrelevant results
+    if (enriched.length > 0 && enriched.length <= 30) {
+      try {
+        const leadNames = enriched.map((l, i) => `${i}: ${l.name} (${l.category})`).join("\n");
+        const filterPrompt = `You are filtering Google Maps search results. The user searched for "${query}" to find potential clients for their service.
+
+Review these businesses and mark which ones are RELEVANT (actual potential clients) vs IRRELEVANT (unrelated businesses that appeared in search by mistake).
+
+Businesses:
+${leadNames}
+
+Respond with JSON only: { "keep": [0, 2, 5, ...], "remove": [1, 3, 4, ...] }
+Only remove businesses that are clearly NOT relevant to the search intent. When in doubt, KEEP the lead.`;
+
+        const filterResult = await groqChat(filterPrompt, { maxTokens: 500, json: true });
+        const parsed = JSON.parse(filterResult);
+
+        if (parsed.keep && Array.isArray(parsed.keep)) {
+          const keepSet = new Set(parsed.keep);
+          enriched = enriched.filter((_, i) => keepSet.has(i));
+        }
+      } catch {
+        // If AI filter fails, return all results (don't block the search)
+      }
+    }
 
     return NextResponse.json({
       results: enriched,

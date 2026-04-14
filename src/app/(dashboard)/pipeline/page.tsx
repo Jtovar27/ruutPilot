@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { LeadDetail, Lead as LeadType } from "@/components/leads/lead-detail";
+import { getBusinessProfile, BusinessProfile } from "@/lib/business-profile";
 
 type Stage = "prospecto" | "contactado" | "propuesta" | "negociacion" | "cerrado";
 
@@ -38,6 +40,12 @@ export default function PipelinePage() {
   const [loading, setLoading] = useState(true);
   const [movingId, setMovingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedLead, setSelectedLead] = useState<LeadType | null>(null);
+  const [profile, setProfile] = useState<BusinessProfile | null>(null);
+
+  useEffect(() => {
+    setProfile(getBusinessProfile());
+  }, []);
 
   const fetchDeals = useCallback(async () => {
     setLoading(true);
@@ -75,6 +83,30 @@ export default function PipelinePage() {
   const getByStage = (stage: Stage) => deals.filter((d) => d.stage === stage);
   const totalValue = deals.filter(d => d.stage === "cerrado").reduce((a, d) => a + (d.value || 0), 0);
   const pipelineValue = deals.filter(d => d.stage !== "cerrado").reduce((a, d) => a + (d.value || 0), 0);
+
+  const openLeadDetail = (deal: Deal) => {
+    const lead = deal.lead || {} as Record<string, any>;
+    setSelectedLead({
+      id: parseInt(deal.id, 10) || 0,
+      name: (lead as any).name || deal.name || deal.company,
+      category: (lead as any).category || "",
+      address: (lead as any).address || "",
+      phone: (lead as any).phone || "",
+      whatsapp: (lead as any).whatsapp || "",
+      email: (lead as any).email || "",
+      website: (lead as any).website || "",
+      instagram: (lead as any).instagram || "",
+      facebook: (lead as any).facebook || "",
+      hours: (lead as any).hours || "",
+      description: (lead as any).description || "",
+      priceLevel: "",
+      mapsUrl: (lead as any).mapsUrl || "",
+      rating: (lead as any).rating || 0,
+      reviews: (lead as any).reviews || 0,
+      hasWebsite: !!(lead as any).website,
+      pitch: "",
+    });
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -144,7 +176,8 @@ export default function PipelinePage() {
                   {stageDeals.map((deal, i) => (
                     <div
                       key={deal.id}
-                      className={`bg-white/[0.05] border border-white/[0.08] rounded-xl p-3.5 hover:bg-white/[0.08] hover:border-white/[0.14] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-150 cursor-grab active:cursor-grabbing ${movingId === deal.id ? "opacity-60" : ""}`}
+                      onClick={() => openLeadDetail(deal)}
+                      className={`bg-white/[0.05] border border-white/[0.08] rounded-xl p-3.5 hover:bg-white/[0.08] hover:border-white/[0.14] hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-150 cursor-pointer ${movingId === deal.id ? "opacity-60" : ""}`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2 min-w-0">
@@ -192,6 +225,15 @@ export default function PipelinePage() {
             );
           })}
         </div>
+      )}
+
+      {selectedLead && (
+        <LeadDetail
+          lead={selectedLead}
+          open={!!selectedLead}
+          onOpenChange={(open) => { if (!open) setSelectedLead(null); }}
+          businessProfile={profile}
+        />
       )}
     </div>
   );

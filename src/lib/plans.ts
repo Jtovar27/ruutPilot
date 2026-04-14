@@ -36,7 +36,7 @@ export const PLAN_LIMITS = {
 export type Plan = keyof typeof PLAN_LIMITS;
 
 // Developer accounts — always get full Agency access regardless of subscription
-const ADMIN_EMAILS = ["ruutdevllc@gmail.com"];
+const ADMIN_EMAILS = ["ruutdevllc@gmail.com", "simongonzalez01@gmail.com"];
 
 export async function getUserPlan(userId: string, email?: string | null): Promise<Plan> {
   if (email && ADMIN_EMAILS.includes(email)) return "agency";
