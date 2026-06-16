@@ -2,6 +2,33 @@
 -- Run this in your Supabase SQL Editor
 
 -- ============================================
+-- PUBLIC AUDIT REQUESTS
+-- ============================================
+create table audit_requests (
+  id                  uuid primary key default gen_random_uuid(),
+  business_name       text not null,
+  owner_name          text not null,
+  email               text not null,
+  phone               text,
+  website             text,
+  city                text,
+  business_type       text not null,
+  leads_per_week      text,
+  lead_sources        text[] not null default '{}',
+  response_time       text,
+  quote_process       text,
+  deposits_required   text,
+  unpaid_invoices     text,
+  review_process      text,
+  current_tools       text,
+  biggest_pain        text not null,
+  preferred_call_time text,
+  extra_notes         text,
+  status              text not null default 'new',
+  created_at          timestamptz default now()
+);
+
+-- ============================================
 -- LEADS
 -- ============================================
 create table leads (
@@ -113,6 +140,7 @@ create table revenue_goals (
 -- ROW LEVEL SECURITY
 -- ============================================
 alter table leads              enable row level security;
+alter table audit_requests     enable row level security;
 alter table pipeline_deals     enable row level security;
 alter table activities         enable row level security;
 alter table email_sequences    enable row level security;
@@ -121,6 +149,11 @@ alter table emails_sent        enable row level security;
 alter table revenue_goals      enable row level security;
 
 -- Policies: users only see their own data
+create policy "audit_requests: public insert"
+  on audit_requests for insert
+  to anon, authenticated
+  with check (true);
+
 create policy "leads: own data"
   on leads for all using (auth.uid() = user_id);
 
@@ -149,6 +182,7 @@ create policy "email_enrollments: via sequence"
 -- INDEXES
 -- ============================================
 create index idx_leads_user          on leads(user_id);
+create index idx_audit_requests_created_at on audit_requests(created_at desc);
 create index idx_deals_user          on pipeline_deals(user_id);
 create index idx_deals_stage         on pipeline_deals(stage);
 create index idx_activities_deal     on activities(deal_id);

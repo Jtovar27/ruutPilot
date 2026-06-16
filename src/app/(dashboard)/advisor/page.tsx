@@ -146,7 +146,7 @@ export default function AdvisorPage() {
         <Card className="border-border/50 bg-muted/20">
           <CardContent className="p-8 text-center">
             <Brain className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">Haz clic en "Analizar mi negocio" para que la IA revise tu pipeline real y te dé acciones concretas para hoy.</p>
+            <p className="text-sm text-muted-foreground">Haz clic en &quot;Analizar mi negocio&quot; para que la IA revise tu pipeline real y te dé acciones concretas para hoy.</p>
           </CardContent>
         </Card>
       )}

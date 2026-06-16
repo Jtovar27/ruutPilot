@@ -1,170 +1,99 @@
-import { Check, X, ArrowRight } from "lucide-react"
+import Link from "next/link";
+import { ArrowRight, Check, ClipboardCheck, MonitorCog } from "lucide-react";
 
-type Feature = {
-  text: string
-  included: boolean
-}
+const auditSteps = [
+  "Map how leads arrive from the website, DMs, calls, and referrals.",
+  "Find stale quotes, unpaid invoices, missing deposits, and review gaps.",
+  "Show the first RuutPilot workflow that would recover or protect revenue.",
+];
 
-type Plan = {
-  name: string
-  price: string
-  period?: string
-  description: string
-  badge?: string
-  highlighted?: boolean
-  features: Feature[]
-  cta: string
-  ctaHref: string
-  ctaStyle: "gradient" | "outline"
-}
-
-const plans: Plan[] = [
-  {
-    name: "Free",
-    price: "Gratis",
-    description: "Para empezar a prospectar",
-    features: [
-      { text: "3 busquedas / mes", included: true },
-      { text: "10 leads por busqueda", included: true },
-      { text: "15 deals en pipeline", included: true },
-      { text: "Google Maps", included: true },
-      { text: "Sin IA", included: false },
-      { text: "Sin email outreach", included: false },
-    ],
-    cta: "Empezar gratis",
-    ctaHref: "/signup",
-    ctaStyle: "outline",
-  },
-  {
-    name: "Pro",
-    price: "$29",
-    period: "/mes",
-    description: "Para el freelancer activo",
-    badge: "MAS POPULAR",
-    highlighted: true,
-    features: [
-      { text: "30 busquedas / mes", included: true },
-      { text: "30 leads por busqueda", included: true },
-      { text: "Pipeline ilimitado", included: true },
-      { text: "Google Maps + Yelp", included: true },
-      { text: "AI completo (Advisor + Call Prep)", included: true },
-      { text: "300 emails / mes", included: true },
-      { text: "Export CSV", included: true },
-    ],
-    cta: "Empezar con Pro",
-    ctaHref: "/signup",
-    ctaStyle: "gradient",
-  },
-  {
-    name: "Agency",
-    price: "$69",
-    period: "/mes",
-    description: "Para equipos y agencias",
-    features: [
-      { text: "Busquedas ilimitadas", included: true },
-      { text: "75 leads por busqueda", included: true },
-      { text: "Todas las fuentes", included: true },
-      { text: "AI ilimitado", included: true },
-      { text: "Emails ilimitados", included: true },
-      { text: "5 miembros de equipo", included: true },
-      { text: "Export masivo", included: true },
-    ],
-    cta: "Contactar ventas",
-    ctaHref: "mailto:ruutdevllc@gmail.com",
-    ctaStyle: "outline",
-  },
-]
+const pilotIncludes = [
+  "Spa-specific lead-to-payment workflow",
+  "Website or landing page lead capture review",
+  "Quote, deposit, follow-up, and review process recommendations",
+  "Clickable RuutPilot demo using spa sample data",
+  "Pilot setup options for early customers",
+];
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="py-24 lg:py-32 border-t border-white/[0.06]">
+    <section id="pilot" className="relative overflow-hidden bg-[#101014] py-20 lg:py-28">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-14 max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-400 mb-3">
-            Precios
-          </p>
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white leading-tight">
-            Planes que crecen contigo
-          </h2>
-          <p className="mt-4 text-base text-zinc-400 leading-relaxed">
-            Empieza gratis. Escala cuando lo necesites.
-          </p>
-        </div>
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div className="ruut-reveal">
+            <p className="text-xs font-semibold uppercase text-emerald-300">
+              Start with validation
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white md:text-4xl">
+              Get the audit before the software pitch.
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-400">
+              The first RuutPilot offer is a free operations audit for med and
+              beauty spas. It diagnoses lost revenue from slow follow-up,
+              inconsistent quoting, missing deposits, unpaid invoices, and weak
+              review systems.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/audit"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-emerald-300 px-5 text-sm font-semibold text-zinc-950 shadow-xl shadow-emerald-300/15 transition-all hover:-translate-y-0.5 hover:bg-emerald-200 focus-visible:ring-2 focus-visible:ring-emerald-200"
+              >
+                Request free audit
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/demo"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.035] px-5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-white/30"
+              >
+                See product loop
+              </Link>
+            </div>
+          </div>
 
-        {/* Cards */}
-        <div className="grid sm:grid-cols-3 gap-6 items-start">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative flex flex-col gap-6 rounded-2xl border p-6 transition-all duration-200 ${
-                plan.highlighted
-                  ? "ring-1 ring-emerald-500/50 bg-[rgba(52,211,153,0.05)] border-emerald-500/30"
-                  : "border-white/[0.07] bg-[rgba(255,255,255,0.03)]"
-              }`}
-            >
-              {/* Plan name + badge */}
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-semibold text-white">{plan.name}</span>
-                {plan.badge && (
-                  <span className="text-[10px] font-semibold tracking-widest bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 rounded-full px-2.5 py-1">
-                    {plan.badge}
-                  </span>
-                )}
-              </div>
-
-              {/* Price */}
-              <div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  {plan.period && (
-                    <span className="text-sm text-zinc-500">{plan.period}</span>
-                  )}
-                </div>
-                <p className="text-sm text-zinc-400 mt-1">{plan.description}</p>
-              </div>
-
-              {/* CTA */}
-              {plan.ctaStyle === "gradient" ? (
-                <a
-                  href={plan.ctaHref}
-                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-medium w-full px-4 py-2.5 rounded-lg shadow-[0_0_24px_rgba(52,211,153,0.15)] hover:shadow-[0_0_32px_rgba(52,211,153,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-                >
-                  {plan.cta}
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              ) : (
-                <a
-                  href={plan.ctaHref}
-                  className="inline-flex items-center justify-center gap-2 border border-white/10 text-zinc-300 hover:bg-white/5 text-sm font-medium w-full px-4 py-2.5 rounded-lg transition-all duration-200"
-                >
-                  {plan.cta}
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              )}
-
-              {/* Divider */}
-              <div className="h-px bg-white/[0.06]" />
-
-              {/* Features */}
-              <ul className="flex flex-col gap-3">
-                {plan.features.map((feature) => (
-                  <li key={feature.text} className="flex items-start gap-2.5">
-                    {feature.included ? (
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0 mt-px" />
-                    ) : (
-                      <X className="h-4 w-4 text-zinc-700 shrink-0 mt-px" />
-                    )}
-                    <span className={`text-sm ${feature.included ? "text-zinc-300" : "text-zinc-600"}`}>
-                      {feature.text}
+          <div className="ruut-perspective grid gap-4 md:grid-cols-2">
+            <article className="ruut-card-3d ruut-gradient-border rounded-2xl border border-white/[0.08] bg-[#17171c]/88 p-6 backdrop-blur-xl">
+              <ClipboardCheck className="h-6 w-6 text-emerald-300" />
+              <h3 className="mt-5 text-lg font-semibold text-white">
+                Free audit flow
+              </h3>
+              <ol className="mt-5 space-y-4">
+                {auditSteps.map((step, index) => (
+                  <li
+                    key={step}
+                    className="flex gap-3 text-sm leading-6 text-zinc-300"
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.06] text-xs font-semibold text-emerald-200">
+                      {index + 1}
                     </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </article>
+
+            <article className="ruut-card-3d rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-6 shadow-2xl shadow-emerald-950/10 backdrop-blur-xl">
+              <MonitorCog className="h-6 w-6 text-emerald-200" />
+              <h3 className="mt-5 text-lg font-semibold text-white">
+                Pilot setup target
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-zinc-300">
+                Early pilots can be sold as done-for-you setup after the audit:
+                website integration, BOS configuration, templates, and monthly
+                support.
+              </p>
+              <ul className="mt-5 space-y-3">
+                {pilotIncludes.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm text-zinc-200">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-200" />
+                    {item}
                   </li>
                 ))}
               </ul>
-            </div>
-          ))}
+            </article>
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

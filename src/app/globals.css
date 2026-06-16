@@ -132,11 +132,164 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
+}
+
+@layer utilities {
+  .ruut-premium-shell {
+    background:
+      linear-gradient(180deg, rgba(11, 11, 14, 0.98) 0%, rgba(13, 14, 17, 1) 42%, rgba(8, 10, 10, 1) 100%),
+      linear-gradient(115deg, rgba(52, 211, 153, 0.16), transparent 32%, rgba(125, 211, 252, 0.08) 68%, transparent);
+  }
+
+  .ruut-grid-surface {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(135deg, rgba(52, 211, 153, 0.09), transparent 42%, rgba(250, 204, 21, 0.045));
+    background-size: 52px 52px, 52px 52px, 100% 100%;
+    background-position: center;
+  }
+
+  .ruut-aurora-slab {
+    background:
+      linear-gradient(110deg, rgba(52, 211, 153, 0.18), rgba(16, 185, 129, 0.03) 34%, rgba(56, 189, 248, 0.13) 62%, rgba(250, 204, 21, 0.08)),
+      rgba(255, 255, 255, 0.035);
+  }
+
+  .ruut-glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.032));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.09),
+      0 24px 80px rgba(0,0,0,0.34);
+  }
+
+  .ruut-gradient-border {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .ruut-gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(52,211,153,0.52), rgba(255,255,255,0.08), rgba(56,189,248,0.26));
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  .ruut-perspective {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .ruut-card-3d {
+    transform-style: preserve-3d;
+    transition:
+      transform 420ms cubic-bezier(.2,.8,.2,1),
+      border-color 240ms ease,
+      background 240ms ease,
+      box-shadow 240ms ease;
+  }
+
+  .ruut-card-3d:hover {
+    transform: translateY(-7px) rotateX(5deg) rotateY(-5deg);
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36), 0 0 46px rgba(52, 211, 153, 0.08);
+  }
+
+  .ruut-float {
+    animation: ruut-float 8s ease-in-out infinite;
+    will-change: translate;
+  }
+
+  .ruut-float-delayed {
+    animation: ruut-float 9s ease-in-out 1.5s infinite;
+    will-change: translate;
+  }
+
+  .ruut-reveal {
+    animation: ruut-reveal 760ms cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  .ruut-reveal-delayed {
+    animation: ruut-reveal 880ms cubic-bezier(.2,.8,.2,1) 120ms both;
+  }
+
+  .ruut-shimmer {
+    background-size: 220% 100%;
+    animation: ruut-shimmer 7s ease-in-out infinite;
+  }
+
+  .ruut-no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .ruut-no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes ruut-float {
+  0%, 100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -14px;
+  }
+}
+
+@keyframes ruut-reveal {
+  from {
+    opacity: 0.92;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ruut-shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   html {
-    @apply font-sans;
+    scroll-behavior: auto;
+  }
+
+  .ruut-float,
+  .ruut-float-delayed,
+  .ruut-reveal,
+  .ruut-reveal-delayed,
+  .ruut-shimmer {
+    animation: none;
+  }
+
+  .ruut-card-3d,
+  .ruut-card-3d:hover {
+    transform: none;
+    transition: none;
+  }
+
+  .ruut-float,
+  .ruut-float-delayed {
+    translate: 0 0;
   }
 }

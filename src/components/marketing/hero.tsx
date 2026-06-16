@@ -1,143 +1,79 @@
-import { ArrowRight, MapPin, Phone, Mail, MessageCircle, Star, Globe } from "lucide-react"
+import Link from "next/link";
+import {
+  ArrowRight,
+  CalendarCheck,
+  CircleDollarSign,
+  MessageSquareText,
+  Quote,
+  Star,
+} from "lucide-react";
+import Hero3DVisual from "@/components/marketing/hero-3d-visual";
+
+const loop = [
+  { icon: MessageSquareText, label: "Lead" },
+  { icon: Quote, label: "Quote" },
+  { icon: CalendarCheck, label: "Booking" },
+  { icon: CircleDollarSign, label: "Payment" },
+  { icon: Star, label: "Review" },
+];
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden min-h-screen flex items-center">
-      {/* Background blobs */}
-      <div className="pointer-events-none absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl" />
-
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — copy */}
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-6">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-medium">
-              <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Sales OS para agencias digitales
-            </div>
-
-            {/* H1 */}
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.05]">
-              Encuentra clientes que necesitan tu servicio —{" "}
-              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-                hoy
-              </span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="max-w-2xl text-zinc-400 text-lg leading-relaxed">
-              RuutPilot extrae leads con telefono, email y WhatsApp de Google Maps, Yelp y directorios en LatAm, Estados Unidos y Europa. Gestiona tu pipeline y cierra mas con IA.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-              <a
-                href="/signup"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium px-6 py-3 rounded-lg shadow-[0_0_24px_rgba(52,211,153,0.15)] hover:shadow-[0_0_32px_rgba(52,211,153,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm"
-              >
-                Empezar gratis
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#features"
-                className="inline-flex items-center gap-2 border border-white/10 text-zinc-300 hover:bg-white/5 font-medium px-6 py-3 rounded-lg transition-all duration-200 text-sm"
-              >
-                Ver como funciona
-              </a>
-            </div>
-            <p className="text-zinc-600 text-xs">Sin tarjeta de credito. Cancela cuando quieras.</p>
+    <section className="relative overflow-hidden pb-10 pt-6 sm:pt-10">
+      <div className="absolute inset-0 ruut-grid-surface opacity-35" />
+      <div className="absolute inset-x-0 top-0 h-72 bg-[linear-gradient(105deg,rgba(52,211,153,0.16),transparent_34%,rgba(56,189,248,0.08)_62%,transparent)] blur-3xl" />
+      <div className="relative mx-auto grid min-h-[calc(100vh-5.5rem)] max-w-7xl items-center gap-12 px-4 py-12 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:px-8 lg:py-20">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-100 shadow-lg shadow-emerald-300/5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.75)]" />
+            Free Revenue Leakage Audit for med and beauty spas
           </div>
 
-          {/* Right — product mock card */}
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="shadow-[0_0_80px_rgba(52,211,153,0.08)] rounded-2xl w-full max-w-sm">
-              <div className="bg-[rgba(255,255,255,0.04)] backdrop-blur border border-white/[0.08] rounded-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700">
-                {/* Card header */}
-                <div className="px-4 py-3 border-b border-white/[0.08] flex items-center justify-between">
-                  <span className="text-xs font-medium text-white">Lead Discovery</span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/25 text-orange-400 text-xs font-medium">
-                    Caliente
-                  </span>
-                </div>
+          <h1 className="mt-7 max-w-4xl text-5xl font-semibold leading-[0.98] text-white sm:text-6xl lg:text-7xl">
+            From lead to payment, your spa finally has a system.
+          </h1>
 
-                {/* Lead 1 — highlighted */}
-                <div className="p-4 border-b border-white/[0.06] bg-emerald-500/[0.03] border-l-2 border-l-emerald-500">
-                  <div className="flex items-start justify-between gap-2 mb-3">
-                    <div>
-                      <p className="text-sm font-semibold text-white">Restaurante El Fogon</p>
-                      <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                        <span className="inline-flex items-center gap-1 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-2 py-0.5">
-                          <Globe className="h-2.5 w-2.5" />
-                          Sin Website
-                        </span>
-                        <span className="inline-flex items-center text-xs bg-zinc-800 text-zinc-400 border border-white/[0.06] rounded-full px-2 py-0.5">
-                          Restaurante
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-0.5 shrink-0">
-                      <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                      <span className="text-xs text-zinc-400">4.2 (89)</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <MapPin className="h-3 w-3 text-emerald-400 shrink-0" />
-                      <span>Av. Insurgentes 420, CDMX</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <Phone className="h-3 w-3 text-emerald-400 shrink-0" />
-                      <span>+52 55 1234 5678</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <Mail className="h-3 w-3 text-emerald-400 shrink-0" />
-                      <span>contacto@elfogon.mx</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <MessageCircle className="h-3 w-3 text-emerald-400 shrink-0" />
-                      <span>+52 55 1234 5678</span>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex justify-end">
-                    <button className="inline-flex items-center gap-1 text-xs bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 rounded-lg px-3 py-1.5 hover:bg-emerald-500/25 transition-all duration-200">
-                      + Al Pipeline
-                    </button>
-                  </div>
-                </div>
+          <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-300 sm:text-lg">
+            RuutPilot shows where money is stuck across leads, quotes,
+            bookings, deposits, invoices, follow-ups, and reviews, then turns
+            those gaps into clear next actions.
+          </p>
 
-                {/* Lead 2 — preview */}
-                <div className="p-4 opacity-60">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-semibold text-white">Taller Mecanico Lopez</p>
-                      <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                        <span className="inline-flex items-center gap-1 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-2 py-0.5">
-                          <Globe className="h-2.5 w-2.5" />
-                          Sin Website
-                        </span>
-                        <span className="inline-flex items-center text-xs bg-zinc-800 text-zinc-400 border border-white/[0.06] rounded-full px-2 py-0.5">
-                          Automotriz
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2">
-                    <MapPin className="h-3 w-3 text-emerald-400 shrink-0" />
-                    <span>Calle 5 de Mayo 78, Guadalajara</span>
-                  </div>
-                </div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/audit"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-300 px-5 text-sm font-semibold text-zinc-950 shadow-xl shadow-emerald-300/15 transition-all hover:-translate-y-0.5 hover:bg-emerald-200 focus-visible:ring-2 focus-visible:ring-emerald-200"
+            >
+              Get the free audit
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/demo"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.05] px-5 text-sm font-semibold text-white shadow-xl shadow-black/10 transition-all hover:-translate-y-0.5 hover:bg-white/[0.09] focus-visible:ring-2 focus-visible:ring-white/30"
+            >
+              View clickable demo
+            </Link>
+          </div>
 
-                {/* Footer */}
-                <div className="px-4 py-3 border-t border-white/[0.06] flex items-center justify-between">
-                  <span className="text-xs text-zinc-500">75 leads encontrados</span>
-                  <span className="text-xs font-medium text-emerald-400">Score: 87</span>
-                </div>
+          <div className="mt-9 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-5">
+            {loop.map((item) => (
+              <div
+                key={item.label}
+                className="ruut-gradient-border flex h-20 flex-col justify-between rounded-2xl border border-white/[0.08] bg-white/[0.04] p-3 backdrop-blur-xl"
+              >
+                <item.icon className="h-4 w-4 text-emerald-300" />
+                <span className="text-xs font-medium text-zinc-300">
+                  {item.label}
+                </span>
               </div>
-            </div>
+            ))}
           </div>
+        </div>
+
+        <div className="relative min-h-[410px] sm:min-h-[470px] lg:min-h-[520px]">
+          <Hero3DVisual />
         </div>
       </div>
     </section>
-  )
+  );
 }

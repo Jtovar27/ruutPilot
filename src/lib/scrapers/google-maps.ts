@@ -427,7 +427,8 @@ export async function scrapeGoogleMaps(
           if (!name || name.length < 2) continue;
           const rating = parseFloat((card.querySelector(".MW4etd, [class*='stars']")?.textContent || "0").replace(",", ".")) || 0;
           const reviews = parseInt((card.querySelector(".UY7F9")?.textContent || "0").replace(/\D/g, ""), 10) || 0;
-          let category = "Business", address = "";
+          let category = "Business";
+          const address = "";
           const lines = card.querySelectorAll(".W4Efsd, [class*='fontBody']");
           if (lines.length > 0) {
             const parts = (lines[0]?.textContent?.trim() || "").split("·").map((s) => s.trim()).filter(Boolean);

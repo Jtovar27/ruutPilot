@@ -1688,8 +1688,17 @@ export default function LeadsPage() {
   const [profileLoaded, setProfileLoaded] = useState(false);
 
   useEffect(() => {
-    setProfile(getBusinessProfile());
-    setProfileLoaded(true);
+    let cancelled = false;
+    const frame = window.requestAnimationFrame(() => {
+      if (cancelled) return;
+      setProfile(getBusinessProfile());
+      setProfileLoaded(true);
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   if (!profileLoaded) return null;

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { TrendingUp, DollarSign, Users, Target, Mail, BarChart2, Loader2, Zap, ArrowRight, Search, Kanban, Settings, CheckCircle2, X } from "lucide-react";
+import { DollarSign, Users, Target, Mail, BarChart2, Loader2, Zap, ArrowRight, Search, Kanban, Settings, CheckCircle2, X } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -58,19 +58,20 @@ function MetaProgress({ label, current, goal }: { label: string; current: number
   );
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+  const [dismissedUpgradeBanner, setDismissedUpgradeBanner] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const upgraded = searchParams.get("upgraded") === "1";
+  const showUpgradeBanner = upgraded && !dismissedUpgradeBanner;
 
   useEffect(() => {
-    if (searchParams.get("upgraded") === "1") {
-      setShowUpgradeBanner(true);
+    if (upgraded) {
       router.replace("/dashboard", { scroll: false });
     }
-  }, [searchParams, router]);
+  }, [upgraded, router]);
 
   useEffect(() => {
     fetch("/api/dashboard")
@@ -144,7 +145,7 @@ export default function DashboardPage() {
               Bienvenido a Pro — todas las funciones están desbloqueadas.
             </p>
           </div>
-          <button onClick={() => setShowUpgradeBanner(false)} className="text-zinc-500 hover:text-white transition-colors">
+          <button onClick={() => setDismissedUpgradeBanner(true)} className="text-zinc-500 hover:text-white transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -300,5 +301,19 @@ export default function DashboardPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }

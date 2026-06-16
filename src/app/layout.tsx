@@ -14,8 +14,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RuutPilot — Sales OS",
-  description: "Tu sistema operativo de ventas con IA",
+  title: "RuutPilot - Revenue Command Center for Med Spas",
+  description:
+    "RuutPilot helps med and beauty spas find missed leads, stalled quotes, unpaid invoices, follow-ups, and review opportunities before revenue slips away.",
+  keywords: [
+    "revenue operations system for med spas",
+    "business operations audit for beauty spas",
+    "lead follow-up system for service businesses",
+    "spa revenue leakage audit",
+    "RuutPilot",
+  ],
 };
 
 export default function RootLayout({
@@ -25,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

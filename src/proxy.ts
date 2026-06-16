@@ -7,10 +7,19 @@ const AUTH_ROUTES = ["/login", "/signup"];
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   let response = NextResponse.next({ request });
+  const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
+  const isAuthRoute = AUTH_ROUTES.some((p) => pathname.startsWith(p));
+
+  if (!isProtected && !isAuthRoute) return response;
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) return response;
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() { return request.cookies.getAll(); },
@@ -24,9 +33,6 @@ export async function proxy(request: NextRequest) {
   );
 
   const { data: { user } } = await supabase.auth.getUser();
-
-  const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
-  const isAuthRoute = AUTH_ROUTES.some((p) => pathname.startsWith(p));
 
   if (isProtected && !user) return NextResponse.redirect(new URL("/login", request.url));
   if (isAuthRoute && user) return NextResponse.redirect(new URL("/dashboard", request.url));

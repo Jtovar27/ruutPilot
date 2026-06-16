@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, PLANS, PlanKey } from "@/lib/stripe";
+import { getStripe, PLANS, PlanKey } from "@/lib/stripe";
 import { getAuthUser } from "@/lib/supabase/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     const authClient = await createClient();
     const { data: { user } } = await authClient.auth.getUser();
 
-    const customer = await stripe.customers.create({
+    const customer = await getStripe().customers.create({
       email: user?.email,
       metadata: { supabase_user_id: userId! },
     });
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-  const session = await stripe.checkout.sessions.create({
+  const session = await getStripe().checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
     payment_method_types: ["card"],

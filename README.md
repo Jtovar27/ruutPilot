@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RuutPilot
 
-## Getting Started
+RuutPilot is a validation-first web app for the RuutDev BOS concept: a revenue command center for small service businesses, starting with med and beauty spas.
 
-First, run the development server:
+The current MVP is focused on validation, not the full authenticated SaaS loop. It includes:
+
+- Landing page for the free Revenue Leakage Audit
+- Audit intake form backed by Supabase
+- Clickable spa-focused product demo
+- Thank-you confirmation page
+- Supabase migration for `audit_requests`
+
+## Routes
+
+- `/` - public landing page
+- `/audit` - multi-step audit request form
+- `/demo` - clickable RuutPilot prototype
+- `/thank-you` - audit request confirmation
+
+Existing authenticated dashboard routes are still in the codebase for later reuse.
+
+## Environment
+
+Create `.env.local` in the project root:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Existing dashboard, AI, email, and Stripe routes may also use:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+SUPABASE_SERVICE_ROLE_KEY=
+GROQ_API_KEY=
+RESEND_API_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_PRO_PRICE_ID=
+STRIPE_AGENCY_PRICE_ID=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Supabase
 
-## Learn More
+Apply the audit request migration:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+supabase/migrations/20260616_audit_requests.sql
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The `audit_requests` table has RLS enabled and allows public insert only. Public users cannot read submissions.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Development
 
-## Deploy on Vercel
+```bash
+npm install
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open `http://localhost:3000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Verification
+
+```bash
+npm run lint
+npm run build
+```

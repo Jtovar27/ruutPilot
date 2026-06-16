@@ -1,47 +1,52 @@
 "use client"
 
 import Link from "next/link"
-import { Layers } from "lucide-react"
+import { ClipboardCheck, Layers, Sparkles } from "lucide-react"
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#09090b]/80 backdrop-blur-xl border-b border-white/[0.06]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <Layers className="h-5 w-5 text-emerald-400" />
-            <span className="font-semibold text-white tracking-tight">
+    <header className="sticky top-0 z-50 w-full px-3 pt-3">
+      <div className="mx-auto max-w-7xl">
+        <div className="ruut-glass flex h-14 items-center justify-between rounded-2xl border border-white/[0.10] px-3 backdrop-blur-2xl sm:px-4">
+          <Link href="/" className="group flex items-center gap-2 rounded-xl focus-visible:ring-2 focus-visible:ring-emerald-200">
+            <span className="flex size-8 items-center justify-center rounded-xl bg-emerald-300 text-zinc-950 shadow-lg shadow-emerald-300/20 transition-transform group-hover:-translate-y-0.5">
+              <Layers className="h-4 w-4" />
+            </span>
+            <span className="text-sm font-semibold text-white">
               RuutPilot
             </span>
           </Link>
 
-          {/* Nav links + CTA */}
-          <nav className="flex items-center gap-1">
-            <a
-              href="#features"
-              className="hidden sm:inline-flex items-center text-sm text-zinc-400 hover:text-white transition-colors px-3 py-2"
+          <nav className="flex items-center gap-1 sm:gap-2">
+            <Link
+              href="/demo"
+              className="hidden items-center rounded-xl px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 sm:inline-flex"
             >
-              Caracteristicas
-            </a>
-            <a
-              href="#pricing"
-              className="hidden sm:inline-flex items-center text-sm text-zinc-400 hover:text-white transition-colors px-3 py-2"
+              Demo
+            </Link>
+            <Link
+              href="/#radar"
+              className="hidden items-center rounded-xl px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 sm:inline-flex"
             >
-              Precios
-            </a>
-            <a
-              href="/login"
-              className="hidden sm:inline-flex items-center text-sm text-zinc-400 hover:text-white transition-colors px-3 py-2 mr-2"
+              Revenue Radar
+            </Link>
+            <Link
+              href="/#pilot"
+              className="hidden items-center rounded-xl px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-white/20 md:inline-flex"
             >
-              Iniciar sesion
-            </a>
-            <a
-              href="/signup"
-              className="inline-flex items-center bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-medium px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              Pilot Offer
+            </Link>
+            <span className="hidden h-8 items-center gap-1 rounded-xl border border-white/[0.08] bg-white/[0.035] px-3 text-xs font-semibold text-emerald-100 lg:inline-flex">
+              <Sparkles className="h-3.5 w-3.5" />
+              Validation MVP
+            </span>
+            <Link
+              href="/audit"
+              className="inline-flex h-9 items-center gap-2 rounded-xl bg-emerald-300 px-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-emerald-300/15 transition-all hover:-translate-y-0.5 hover:bg-emerald-200 focus-visible:ring-2 focus-visible:ring-emerald-200 sm:px-4"
             >
-              Empezar gratis
-            </a>
+              <ClipboardCheck className="h-4 w-4" />
+              Free Audit
+            </Link>
           </nav>
         </div>
       </div>

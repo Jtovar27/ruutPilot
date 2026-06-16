@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { MoreHorizontal, Plus, Phone, Mail, DollarSign, ChevronRight, Loader2, RefreshCw } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -11,6 +10,11 @@ import { getBusinessProfile, BusinessProfile } from "@/lib/business-profile";
 
 type Stage = "prospecto" | "contactado" | "propuesta" | "negociacion" | "cerrado";
 
+type DealLead = Partial<Omit<LeadType, "id">> & {
+  name?: string;
+  company?: string;
+};
+
 interface Deal {
   id: string;
   name: string;
@@ -18,7 +22,7 @@ interface Deal {
   value: number;
   stage: Stage;
   created_at: string;
-  lead?: { name: string; company: string; email: string; phone: string } | null;
+  lead?: DealLead | null;
 }
 
 const STAGES: { key: Stage; label: string; accent: string; headerBorder: string }[] = [
@@ -44,7 +48,15 @@ export default function PipelinePage() {
   const [profile, setProfile] = useState<BusinessProfile | null>(null);
 
   useEffect(() => {
-    setProfile(getBusinessProfile());
+    let cancelled = false;
+    const frame = window.requestAnimationFrame(() => {
+      if (!cancelled) setProfile(getBusinessProfile());
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   const fetchDeals = useCallback(async () => {
@@ -85,25 +97,25 @@ export default function PipelinePage() {
   const pipelineValue = deals.filter(d => d.stage !== "cerrado").reduce((a, d) => a + (d.value || 0), 0);
 
   const openLeadDetail = (deal: Deal) => {
-    const lead = deal.lead || {} as Record<string, any>;
+    const lead = deal.lead ?? {};
     setSelectedLead({
       id: parseInt(deal.id, 10) || 0,
-      name: (lead as any).name || deal.name || deal.company,
-      category: (lead as any).category || "",
-      address: (lead as any).address || "",
-      phone: (lead as any).phone || "",
-      whatsapp: (lead as any).whatsapp || "",
-      email: (lead as any).email || "",
-      website: (lead as any).website || "",
-      instagram: (lead as any).instagram || "",
-      facebook: (lead as any).facebook || "",
-      hours: (lead as any).hours || "",
-      description: (lead as any).description || "",
+      name: lead.name || deal.name || deal.company,
+      category: lead.category || "",
+      address: lead.address || "",
+      phone: lead.phone || "",
+      whatsapp: lead.whatsapp || "",
+      email: lead.email || "",
+      website: lead.website || "",
+      instagram: lead.instagram || "",
+      facebook: lead.facebook || "",
+      hours: lead.hours || "",
+      description: lead.description || "",
       priceLevel: "",
-      mapsUrl: (lead as any).mapsUrl || "",
-      rating: (lead as any).rating || 0,
-      reviews: (lead as any).reviews || 0,
-      hasWebsite: !!(lead as any).website,
+      mapsUrl: lead.mapsUrl || "",
+      rating: lead.rating || 0,
+      reviews: lead.reviews || 0,
+      hasWebsite: !!lead.website,
       pitch: "",
     });
   };
